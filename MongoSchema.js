@@ -10,12 +10,7 @@ const featureSchema = mongoose.Schema({
 })
 const Feature = mongoose.model('Feature', featureSchema);
 
-//sub for ProductInfo
-const photoSchema = mongoose.Schema({
-  thumbnail_url: String,
-  url: String
-})
-const Photo = mongoose.model('Photo', photoSchema);
+
 
 //sub for ProductInfo
 const skuSchema = mongoose.Schema({
@@ -33,15 +28,15 @@ const styleSchema = mongoose.Schema({
   original_price: String,
   sale_price: String,
   default?: Boolean,
-  photos:[Photo],
+  photos:[],
   skus:{SKU}
 })
 const Style = mongoose.model('Style', styleSchema);
 
 //Detailed product info
-const prodInfoSchema = mongoose.Schema({
+const productSchema = mongoose.Schema({
   id: Number,
-  name: String,
+  name: {required: true, type: String}, //validation 
   slogan: String,
   description: String,
   category: String,
@@ -50,7 +45,7 @@ const prodInfoSchema = mongoose.Schema({
   styles: {Style}, //sub to style
 })
 
-const ProductInfo = mongoose.model('ProductInfo', prodInfoSchema);
+const Product = mongoose.model('Product', productSchema);
 
 
 
