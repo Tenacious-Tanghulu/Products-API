@@ -1,37 +1,31 @@
+DROP DATABASE IF EXISTS product;
 
-DROP TABLE IF EXISTS `Product`;
+CREATE DATABASE product;
 
---add not null
---price is positive
---character limits
---foriegn key constraints
+DROP TABLE IF EXISTS product;
 
---Generated always as identity (autoincrement)
-
-
-CREATE TABLE Product (
-  id INTEGER NOT NULL,
-  name VARCHAR(100) NOT NULL,
-  slogan VARCHAR(1000),
-  description VARCHAR(1000),
-  category VARCHAR(30) NOT NULL,
-  default_price INT NOT NULL CHECK (default_price > 0),
-  id_Features INTEGER,
-  related INT,
+CREATE TABLE product (
+  id INTEGER GENERATED ALWAYS AS IDENTITY,
+  name VARCHAR(50) NOT NULL,
+  slogan VARCHAR(100) NOT NULL,
+  description VARCHAR(1000) NOT NULL,
+  category VARCHAR(50) NOT NULL,
+  default_price INTEGER NOT NULL CHECK (default_price > -1),
   PRIMARY KEY (id)
 );
 
 -- ---
--- Table 'Features'
+-- Table 'features'
 --
 -- ---
 
-DROP TABLE IF EXISTS Features;
+DROP TABLE IF EXISTS features;
 
-CREATE TABLE Features (
-  id INTEGER NOT NULL AUTO_INCREMENT,
-  feature VARCHAR(30) NOT NULL,
-  value VARCHAR(30) NOT NULL,
+CREATE TABLE features (
+  id INTEGER GENERATED ALWAYS AS IDENTITY,
+  feature VARCHAR(50) NOT NULL,
+  value VARCHAR(50) NOT NULL,
+  products_id INTEGER NOT NULL,
   PRIMARY KEY (id)
 );
 
@@ -43,13 +37,27 @@ CREATE TABLE Features (
 DROP TABLE IF EXISTS styles;
 
 CREATE TABLE styles (
-  id INTEGER NOT NULL AUTO_INCREMENT,
-  name VARCHAR(100) NOT NULL,
-  original_price INT NOT NULL CHECK (original_price > 0),
-  sale_price INT CHECK (sale_price > 0),
-  default BOOLEAN NOT NULL,
-  photos VARCHAR,
-  id_Product INTEGER NOT NULL,
+  id INTEGER GENERATED ALWAYS AS IDENTITY,
+  style_name VARCHAR(50) NOT NULL,
+  original_price INTEGER NOT NULL,
+  sale_price VARCHAR(20),
+  isdefault BOOLEAN NOT NULL,
+  products_id INTEGER NOT NULL,
+  PRIMARY KEY (id)
+);
+
+-- ---
+-- Table 'photos'
+--
+-- ---
+
+DROP TABLE IF EXISTS photos;
+
+CREATE TABLE photos (
+  id INTEGER GENERATED ALWAYS AS IDENTITY,
+  thumbnail TEXT NOT NULL,
+  url VARCHAR(1000) NOT NULL,
+  styles_id INTEGER NOT NULL,
   PRIMARY KEY (id)
 );
 
@@ -61,11 +69,38 @@ CREATE TABLE styles (
 DROP TABLE IF EXISTS skus;
 
 CREATE TABLE skus (
-  id INTEGER NOT NULL AUTO_INCREMENT,
-  sku_number INTEGER NOT NULL,
-  quantity INT NOT NULL,
-  size VARCHAR NOT NULL,
-  id_styles INTEGER NOT NULL,
+  id INTEGER GENERATED ALWAYS AS IDENTITY,
+  styleId INTEGER,
+  quantity INTEGER NOT NULL,
+  size VARCHAR(30) NOT NULL,
+  PRIMARY KEY (id)
+);
+
+-- ---
+-- Table 'style_skus'
+--
+-- ---
+
+DROP TABLE IF EXISTS style_skus;
+
+CREATE TABLE style_skus (
+  id INTEGER GENERATED ALWAYS AS IDENTITY,
+  styles_id INTEGER NOT NULL,
+  skus_id INTEGER NOT NULL,
+  PRIMARY KEY (id)
+);
+
+-- ---
+-- Table 'related_products'
+--
+-- ---
+
+DROP TABLE IF EXISTS related;
+
+CREATE TABLE related (
+  id INTEGER GENERATED ALWAYS AS IDENTITY,
+  products_id INTEGER NOT NULL,
+  related_id INTEGER NOT NULL,
   PRIMARY KEY (id)
 );
 
@@ -73,29 +108,47 @@ CREATE TABLE skus (
 -- Foreign Keys
 -- ---
 
-ALTER TABLE Product ADD FOREIGN KEY (id_Features) REFERENCES Features (id);
-ALTER TABLE Product ADD FOREIGN KEY (related) REFERENCES Product (id);
-ALTER TABLE styles ADD FOREIGN KEY (id_Product) REFERENCES Product (id);
-ALTER TABLE skus ADD FOREIGN KEY (id_styles) REFERENCES styles (id);
+ALTER TABLE features ADD FOREIGN KEY (products_id) REFERENCES product (id);
+ALTER TABLE styles ADD FOREIGN KEY (products_id) REFERENCES product (id);
+ALTER TABLE photos ADD FOREIGN KEY (styles_id) REFERENCES styles (id);
+ALTER TABLE style_skus ADD FOREIGN KEY (styles_id) REFERENCES styles (id);
+ALTER TABLE style_skus ADD FOREIGN KEY (skus_id) REFERENCES skus (id);
+ALTER TABLE related ADD FOREIGN KEY (products_id) REFERENCES product (id);
+ALTER TABLE related ADD FOREIGN KEY (related_id) REFERENCES product (id);
 
--- ---
--- Table Properties
--- ---
+COPY product (id, name, slogan, description, category, default_price) from '/Users/sean-macbook/hackreactor/Products-API/data/product.csv' delimiter ',' CSV header;
 
--- ALTER TABLE `Product` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
--- ALTER TABLE `Features` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
--- ALTER TABLE `styles` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
--- ALTER TABLE `skus` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+  --id INTEGER GENERATED ALWAYS AS IDENTITY,
+  --name VARCHAR(50) NOT NULL,
+  --slogan VARCHAR(100) NOT NULL,
+  --description VARCHAR(1000) NOT NULL,
+  --category VARCHAR(50) NOT NULL,
+  --default_price INTEGER NOT NULL CHECK (default_price > 0),
 
--- ---
--- Test Data
--- ---
 
--- INSERT INTO `Product` (`id`,`name`,`slogan`,`description`,`category`,`default_price`,`id_Features`,`new field`,`related`) VALUES
--- ('','','','','','','','','');
--- INSERT INTO `Features` (`id`,`feature`,`value`) VALUES
--- ('','','');
--- INSERT INTO `styles` (`id`,`name`,`original_price`,`sale_price`,`default`,`photos`,`id_Product`) VALUES
--- ('','','','','','','');
--- INSERT INTO `skus` (`id`,`sku_number`,`quantity`,`size`,`id_styles`) VALUES
--- ('','','','','');
+
+COPY styles (id, products_id, style_name, sale_price, original_price, isdefault) from '/Users/sean-macbook/hackreactor/Products-API/data/styles.csv' delimiter ',' CSV header;
+
+COPY skus (id, styleId, size, quantity) from '/Users/sean-macbook/hackreactor/Products-API/data/skus.csv' delimiter ',' CSV header;
+ --id INTEGER GENERATED ALWAYS AS IDENTITY,
+  --quantity INTEGER NOT NULL,
+  --size VARCHAR(5) NOT NULL,
+
+
+COPY features (id, products_id, feature, value) from '/Users/sean-macbook/hackreactor/Products-API/data/features.csv' delimiter ',' CSV header;
+--id INTEGER GENERATED ALWAYS AS IDENTITY,
+  --feature VARCHAR(50) NOT NULL,
+  --value VARCHAR(50) NOT NULL,
+  --products_id
+
+
+COPY photos (id, styles_id, url, thumbnail) from '/Users/sean-macbook/hackreactor/Products-API/data/photos.csv' delimiter ',' CSV header;
+--id INTEGER GENERATED ALWAYS AS IDENTITY,
+  --thumbnail VARCHAR(50) NOT NULL,
+  --url VARCHAR(50) NOT NULL,
+  --styles_id INTEGER NOT NULL,
+
+--id styleId url tumbnail_url
+
+
+

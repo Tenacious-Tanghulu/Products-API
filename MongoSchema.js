@@ -36,7 +36,7 @@ const Style = mongoose.model('Style', styleSchema);
 //Detailed product info
 const productSchema = mongoose.Schema({
   id: Number,
-  name: {required: true, type: String}, //validation 
+  name: {required: true, type: String}, //validation
   slogan: String,
   description: String,
   category: String,
@@ -97,3 +97,8 @@ Get /products -
 //SKU
 
 //
+
+
+client.query(create_table).then(res => console.log('Table successfully created!'));
+
+const stream = client.query(copyFrom(`COPY ${table_name} FROM STDIN DELIMITER ',' CSV HEADER;`
