@@ -116,39 +116,44 @@ ALTER TABLE style_skus ADD FOREIGN KEY (skus_id) REFERENCES skus (id);
 ALTER TABLE related ADD FOREIGN KEY (products_id) REFERENCES product (id);
 ALTER TABLE related ADD FOREIGN KEY (related_id) REFERENCES product (id);
 
+
+-- Table loading commands
+
+-- Load products
 COPY product (id, name, slogan, description, category, default_price) from '/Users/sean-macbook/hackreactor/Products-API/data/product.csv' delimiter ',' CSV header;
 
-  --id INTEGER GENERATED ALWAYS AS IDENTITY,
-  --name VARCHAR(50) NOT NULL,
-  --slogan VARCHAR(100) NOT NULL,
-  --description VARCHAR(1000) NOT NULL,
-  --category VARCHAR(50) NOT NULL,
-  --default_price INTEGER NOT NULL CHECK (default_price > 0),
-
-
-
+-- Load styles
 COPY styles (id, products_id, style_name, sale_price, original_price, isdefault) from '/Users/sean-macbook/hackreactor/Products-API/data/styles.csv' delimiter ',' CSV header;
 
+-- Load SKUs
 COPY skus (id, styleId, size, quantity) from '/Users/sean-macbook/hackreactor/Products-API/data/skus.csv' delimiter ',' CSV header;
- --id INTEGER GENERATED ALWAYS AS IDENTITY,
-  --quantity INTEGER NOT NULL,
-  --size VARCHAR(5) NOT NULL,
 
-
+--Load Features
 COPY features (id, products_id, feature, value) from '/Users/sean-macbook/hackreactor/Products-API/data/features.csv' delimiter ',' CSV header;
---id INTEGER GENERATED ALWAYS AS IDENTITY,
-  --feature VARCHAR(50) NOT NULL,
-  --value VARCHAR(50) NOT NULL,
-  --products_id
 
-
+--Load Photos
 COPY photos (id, styles_id, url, thumbnail) from '/Users/sean-macbook/hackreactor/Products-API/data/photos.csv' delimiter ',' CSV header;
---id INTEGER GENERATED ALWAYS AS IDENTITY,
-  --thumbnail VARCHAR(50) NOT NULL,
-  --url VARCHAR(50) NOT NULL,
-  --styles_id INTEGER NOT NULL,
 
---id styleId url tumbnail_url
+
+
+--GET/products:
+
+SELECT * FROM product
+LIMIT  (x)
+OFFSET (x)
+ORDER BY id
+-- limit # of rows returned
+-- Offest starts at certain # down (page# x results/page)
+
+
+--GET /products/:product_id:
+
+SELECT * FROM product WHERE id = product_id
+--add features
+SELECT * FROM features WHERE product_id = product_id
+
+
+--GET /products/:product_Id/stlyes
 
 
 

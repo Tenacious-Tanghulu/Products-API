@@ -2,22 +2,23 @@ const express = require('express')
 const app = express()
 const port = 3000
 
+app.use(express.json());
 
-app.get('/products'){
-  res.send('Products');
-}
+app.get('/products', (req, res) =>{
+  res.status(200).send('Products');
+})
 
-app.get('/products/:product_id') {
-  res.send('Product ID');
-}
+app.get('/products/:product_id', (req, res) => {
+  res.status(200).send('Product ID');
+})
 
-app.get('/products/:product_id/styles') {
-  res.send('Styles');
-}
+app.get('/products/:product_id/styles', (req, res) => {
+  res.status(200).send('Styles');
+})
 
-app.get('/products/:products_id/related') {
-  res.send('Related');
-}
+app.get('/products/:products_id/related', (req, res) => {
+  res.status(200).send('Related');
+})
 
 
 
