@@ -45,6 +45,19 @@ CREATE TABLE styles (
   products_id INTEGER NOT NULL,
   PRIMARY KEY (id)
 );
+-- ---
+-- Table 'skus'
+--
+-- ---
+DROP TABLE IF EXISTS skus;
+
+CREATE TABLE skus (
+  id INTEGER GENERATED ALWAYS AS IDENTITY,
+  styleId INTEGER,
+  quantity INTEGER NOT NULL,
+  size VARCHAR(30) NOT NULL,
+  PRIMARY KEY (id)
+);
 
 -- ---
 -- Table 'photos'
@@ -61,34 +74,6 @@ CREATE TABLE photos (
   PRIMARY KEY (id)
 );
 
--- ---
--- Table 'skus'
---
--- ---
-
-DROP TABLE IF EXISTS skus;
-
-CREATE TABLE skus (
-  id INTEGER GENERATED ALWAYS AS IDENTITY,
-  styleId INTEGER,
-  quantity INTEGER NOT NULL,
-  size VARCHAR(30) NOT NULL,
-  PRIMARY KEY (id)
-);
-
--- ---
--- Table 'style_skus'
---
--- ---
-
-DROP TABLE IF EXISTS style_skus;
-
-CREATE TABLE style_skus (
-  id INTEGER GENERATED ALWAYS AS IDENTITY,
-  styles_id INTEGER NOT NULL,
-  skus_id INTEGER NOT NULL,
-  PRIMARY KEY (id)
-);
 
 -- ---
 -- Table 'related_products'
@@ -134,26 +119,6 @@ COPY features (id, products_id, feature, value) from '/Users/sean-macbook/hackre
 --Load Photos
 COPY photos (id, styles_id, url, thumbnail) from '/Users/sean-macbook/hackreactor/Products-API/data/photos.csv' delimiter ',' CSV header;
 
-
-
---GET/products:
-
-SELECT * FROM product
-LIMIT  (x)
-OFFSET (x)
-ORDER BY id
--- limit # of rows returned
--- Offest starts at certain # down (page# x results/page)
-
-
---GET /products/:product_id:
-
-SELECT * FROM product WHERE id = product_id
---add features
-SELECT * FROM features WHERE product_id = product_id
-
-
---GET /products/:product_Id/stlyes
 
 
 

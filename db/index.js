@@ -1,8 +1,8 @@
 const { Pool, Client } = require('pg')
 const pool = new Pool({
-  host: 'localhost',
   user: 'sean-macbook',
-  
+  host: 'localhost',
+  database: 'product'
 })
 
 pool.on('error', (err, client) => {
@@ -10,14 +10,20 @@ pool.on('error', (err, client) => {
   process.exit(-1)
 })
 
-(async () => {
+;(async () => {
   const client = await pool.connect()
   try {
-    const res = await client.query('SELECT * FROM users WHERE id = $1', [1])
+    const res = await client.query('SELECT * FROM product WHERE id = $1', [22])
     console.log(res.rows[0])
   } finally {
-    // Make sure to release the client before any error handling,
-    // just in case the error handling itself throws an error.
     client.release()
   }
 })().catch(err => console.log(err.stack))
+
+
+
+
+
+module.exports = {
+  query: (text, params) => pool.query(text, params),
+}
