@@ -4,6 +4,7 @@ const port = 3000;
 const model = require('./models');
 
 app.use(express.json());
+
 app.get('/products', model.getProducts);
 app.get('/products/:product_id/styles', model.getStyles);
 app.get('/products/:product_id/related', model.getRelated);
