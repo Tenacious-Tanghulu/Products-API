@@ -120,5 +120,6 @@ COPY features (id, products_id, feature, value) from '/Users/sean-macbook/hackre
 COPY photos (id, styles_id, url, thumbnail) from '/Users/sean-macbook/hackreactor/Products-API/data/photos.csv' delimiter ',' CSV header;
 
 
-
-
+CREATE INDEX idx_styles_product ON styles(products_id);
+CREATE INDEX idx_photos_styles ON photos(styles_id);
+CREATE INDEX idx_skus_styles ON skus(styleId);

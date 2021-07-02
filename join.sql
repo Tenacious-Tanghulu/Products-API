@@ -2,7 +2,7 @@
 
 
 
- SELECT (cols) from styles inner join photos ON styles.id = photos.styles_id inner join skus ON styles.id = skus.styleId where styles.products_id = 1;
+ SELECT * from styles inner join photos ON styles.id = photos.styles_id inner join skus ON styles.id = skus.styleId where styles.products_id = 1;
 
 
 --GET/products:
