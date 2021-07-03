@@ -28,3 +28,20 @@ SELECT product.id, product.name, product.slogan, product.description, product.ca
 SELECT style_name, original_price, sale_price, isdefault FROM styles WHERE products_id = 34;
 SELECT thumbnail, url FROM photos WHERE styles_id = ???;
 SELECT size, quantity FROM skus WHERE styleId = ???;
+
+
+
+-- Load products
+COPY product (id, name, slogan, description, category, default_price) from '/Users/sean-macbook/hackreactor/Products-API/data/product.csv' delimiter ',' CSV header;
+
+-- Load styles
+COPY styles (id, products_id, style_name, sale_price, original_price, isdefault) from '/Users/sean-macbook/hackreactor/Products-API/data/styles.csv' delimiter ',' CSV header;
+
+-- Load SKUs
+COPY skus (id, styleId, size, quantity) from '/Users/sean-macbook/hackreactor/Products-API/data/skus.csv' delimiter ',' CSV header;
+
+--Load Features
+COPY features (id, products_id, feature, value) from '/Users/sean-macbook/hackreactor/Products-API/data/features.csv' delimiter ',' CSV header;
+
+--Load Photos
+COPY photos (id, styles_id, url, thumbnail) from '/Users/sean-macbook/hackreactor/Products-API/data/photos.csv' delimiter ',' CSV header;

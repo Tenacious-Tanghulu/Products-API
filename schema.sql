@@ -1,8 +1,5 @@
-DROP DATABASE IF EXISTS product;
 
-CREATE DATABASE product;
 
-DROP TABLE IF EXISTS product;
 
 CREATE TABLE product (
   id INTEGER GENERATED ALWAYS AS IDENTITY,
@@ -103,22 +100,6 @@ ALTER TABLE related ADD FOREIGN KEY (related_id) REFERENCES product (id);
 
 
 -- Table loading commands
-
--- Load products
-COPY product (id, name, slogan, description, category, default_price) from '/Users/sean-macbook/hackreactor/Products-API/data/product.csv' delimiter ',' CSV header;
-
--- Load styles
-COPY styles (id, products_id, style_name, sale_price, original_price, isdefault) from '/Users/sean-macbook/hackreactor/Products-API/data/styles.csv' delimiter ',' CSV header;
-
--- Load SKUs
-COPY skus (id, styleId, size, quantity) from '/Users/sean-macbook/hackreactor/Products-API/data/skus.csv' delimiter ',' CSV header;
-
---Load Features
-COPY features (id, products_id, feature, value) from '/Users/sean-macbook/hackreactor/Products-API/data/features.csv' delimiter ',' CSV header;
-
---Load Photos
-COPY photos (id, styles_id, url, thumbnail) from '/Users/sean-macbook/hackreactor/Products-API/data/photos.csv' delimiter ',' CSV header;
-
 
 CREATE INDEX idx_styles_product ON styles(products_id);
 CREATE INDEX idx_photos_styles ON photos(styles_id);
